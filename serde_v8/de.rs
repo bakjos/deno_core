@@ -776,6 +776,7 @@ fn to_utf8_slow(
     scope,
     buf.spare_capacity_mut(),
     v8::WriteFlags::kReplaceInvalidUtf8,
+    None,
   );
 
   // SAFETY: write_utf8_uninit guarantees `bytes_len` bytes are initialized & valid utf8
