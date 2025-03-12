@@ -939,6 +939,10 @@ pub extern "C" fn promise_reject_callback(message: v8::PromiseRejectMessage) {
   // SAFETY: `CallbackScope` can be safely constructed from `&PromiseRejectMessage`
   let scope = &mut unsafe { v8::CallbackScope::new(&message) };
 
+  if deno_core::_ops::get_context_state(scope).is_none() {
+    return;
+  }
+
   let exception_state = JsRealm::exception_state_from_scope(scope);
   exception_state.track_promise_rejection(
     scope,

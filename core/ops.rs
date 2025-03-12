@@ -97,7 +97,7 @@ pub struct OpCtx {
 
 impl OpCtx {
   #[allow(clippy::too_many_arguments)]
-  pub(crate) fn new(
+  pub fn new(
     id: OpId,
     isolate: *mut Isolate,
     op_driver: Rc<OpDriverImpl>,

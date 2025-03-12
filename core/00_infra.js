@@ -175,6 +175,13 @@
     }
   }
 
+  function newNativePromise(opName) {
+    const id = nextPromiseId;
+    nextPromiseId = (id + 1) & 0xffffffff;
+    const promise = setPromise(id); 
+    return { promiseId: id, promise };
+  }
+
   function hasPromise(promiseId) {
     // Check if out of ring bounds, fallback to map
     const outOfBounds = promiseId < nextPromiseId - RING_SIZE;
@@ -430,6 +437,7 @@
     setUpAsyncStub,
     hasPromise,
     promiseIdSymbol,
+    newNativePromise,
   });
 
   const infra = {

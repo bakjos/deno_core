@@ -47,7 +47,7 @@ pub enum OpScheduling {
 ///
 /// The driver takes an optional [`OpMappingContext`] implementation, which defaults to
 /// one compatible with v8. This is used solely for testing purposes.
-pub(crate) trait OpDriver<C: OpMappingContext = V8OpMappingContext>:
+pub trait OpDriver<C: OpMappingContext = V8OpMappingContext>:
   Default
 {
   /// Submits an operation that is expected to complete successfully without errors.

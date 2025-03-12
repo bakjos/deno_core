@@ -54,7 +54,7 @@ impl Hasher for IdentityHasher {
 }
 
 /// We may wish to experiment with alternative drivers in the future.
-pub(crate) type OpDriverImpl = super::op_driver::FuturesUnorderedDriver;
+pub type OpDriverImpl = super::op_driver::FuturesUnorderedDriver;
 
 pub struct ContextState {
   pub(crate) task_spawner_factory: Arc<V8TaskSpawnerFactory>,
@@ -67,7 +67,7 @@ pub struct ContextState {
   pub(crate) unrefed_ops:
     RefCell<HashSet<i32, BuildHasherDefault<IdentityHasher>>>,
   pub(crate) activity_traces: RuntimeActivityTraces,
-  pub(crate) pending_ops: Rc<OpDriverImpl>,
+  pub pending_ops: Rc<OpDriverImpl>,
   // We don't explicitly re-read this prop but need the slice to live alongside
   // the context
   pub(crate) op_ctxs: Box<[OpCtx]>,
@@ -586,3 +586,24 @@ impl JsRealm {
     )
   }
 }
+
+pub fn get_context_state(scope: &mut v8::HandleScope<'_>) -> Option<Rc<ContextState>> {
+  let state = JsRealm::state_from_scope(scope);
+  return Some(state);
+}
+
+pub fn set_context_state(scope: &mut v8::HandleScope<'_>, state: Option<Rc<ContextState>>) -> bool {
+  let context = scope.get_current_context();
+  if let Some(context_state) = state {
+    unsafe {
+        context.set_aligned_pointer_in_embedder_data(
+            CONTEXT_STATE_SLOT_INDEX,
+            Rc::into_raw(context_state) as *mut libc::c_void,
+        );
+    }
+    true
+  } else {
+    false
+  }
+}
+

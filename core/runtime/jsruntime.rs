@@ -764,7 +764,7 @@ impl JsRuntime {
     JsRuntime::new_inner(options, false)
   }
 
-  pub(crate) fn state_from(isolate: &v8::Isolate) -> Rc<JsRuntimeState> {
+  pub fn state_from(isolate: &v8::Isolate) -> Rc<JsRuntimeState> {
     let state_ptr = isolate.get_data(STATE_DATA_OFFSET);
     let state_rc =
       // SAFETY: We are sure that it's a valid pointer for whole lifetime of

@@ -187,6 +187,8 @@ pub mod _ops {
   pub use super::ops_metrics::dispatch_metrics_async;
   pub use super::ops_metrics::dispatch_metrics_fast;
   pub use super::ops_metrics::dispatch_metrics_slow;
+  pub use super::runtime::get_context_state;
+  pub use super::runtime::set_context_state;
   pub use super::ops_metrics::OpMetricsEvent;
   pub use super::runtime::ops::*;
   pub use super::runtime::ops_rust_to_v8::*;
